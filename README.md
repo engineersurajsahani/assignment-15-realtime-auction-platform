@@ -1,4 +1,10 @@
 # 🔨 Assignment 15: Real-Time Live Auction & Bidding Engine (Socket.io)
+
+---
+
+## 🌐 Live Production Deployment on Render
+- **Live Production URL:** [https://assignment15-yplc.onrender.com](https://assignment15-yplc.onrender.com)
+
 > **Track:** Backend & Real-Time Web | **Level:** Advanced | **Estimated Time:** 8–10 Hours  
 > **Tech Stack:** Node.js, Express.js, Socket.io, In-Memory State Engine, Timer Synchronizer, CORS
 
