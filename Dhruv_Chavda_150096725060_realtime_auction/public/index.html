@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔨 Sotheby's Live - Real-Time Auction & Bidding Floor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="auction-body">
+  <!-- Dynamic Notification Bar for Outbid & Anti-Snipe Alerts -->
+  <div class="alert-banner-container" id="alert-banner-container">
+    <!-- Dynamic alert toasts appear here -->
+  </div>
+
+  <!-- Header Navigation -->
+  <header class="auction-header">
+    <div class="header-brand">
+      <span class="brand-gavel">🔨</span>
+      <div class="brand-titles">
+        <h1>AUCTION<span class="gold-text">ARENA</span></h1>
+        <p>Live Real-Time Trading Floor</p>
+      </div>
+    </div>
+
+    <!-- Multi-Auction Room Selector -->
+    <div class="room-selector-group">
+      <label>Lot:</label>
+      <select id="select-auction-room">
+        <option value="AUC_VINTAGE_99">Lot #1: 1967 Vintage Fender Stratocaster</option>
+        <option value="AUC_ROLEX_55">Lot #2: Rolex Daytona Platinum</option>
+        <option value="AUC_CYBER_77">Lot #3: Tesla Cybertruck Cyberbeast</option>
+      </select>
+    </div>
+
+    <!-- User & Viewer Status -->
+    <div class="header-user-status">
+      <div class="viewer-pill">
+        <span class="live-dot"></span>
+        <span id="viewer-count">1</span> Watching
+      </div>
+      <div class="user-badge" id="user-badge-btn">
+        <span class="avatar">👤</span>
+        <span id="current-username-display">Bidder</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Trading Floor Container -->
+  <main class="trading-floor-grid">
+    <!-- Left Column: Item Showcase & Countdown -->
+    <section class="item-showcase-panel">
+      <div class="item-image-wrapper">
+        <img id="item-image" src="https://images.unsplash.com/photo-1550291652-6ea9114a47b1?w=800&auto=format&fit=crop&q=80" alt="Auction Item">
+        <div class="category-chip" id="item-category">Antiques & Collectibles</div>
+        <div class="lot-status-pill" id="lot-status-pill">🟢 LIVE BIDDING</div>
+      </div>
+
+      <div class="item-details">
+        <h2 id="item-title">1967 Vintage Fender Stratocaster</h2>
+        <p id="item-description">Original condition rare Sunburst electric guitar in custom flight case.</p>
+      </div>
+
+      <!-- Live Clock & Price Display -->
+      <div class="stats-ticker-grid">
+        <!-- Countdown Clock -->
+        <div class="stat-card timer-card" id="timer-card">
+          <span class="stat-label">TIME REMAINING</span>
+          <div class="timer-display">
+            <span class="timer-icon">⏳</span>
+            <span class="timer-digits" id="timer-digits">01:30</span>
+          </div>
+          <span class="snipe-hint">Bid < 15s adds +20s anti-snipe</span>
+        </div>
+
+        <!-- Current Highest Bid -->
+        <div class="stat-card price-card">
+          <span class="stat-label">CURRENT HIGHEST BID</span>
+          <div class="price-display">
+            <span class="currency-symbol">₹</span>
+            <span class="price-digits" id="price-digits">50,000</span>
+          </div>
+          <div class="leader-info">
+            Leading Bidder: <strong id="leader-name">None yet</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sold / Winner Banner (hidden by default) -->
+      <div class="sold-banner hidden" id="sold-banner">
+        <div class="gavel-drop">🔨 SOLD!</div>
+        <h3 id="sold-winner-text">Winning Bidder: Vikram</h3>
+        <p id="sold-price-text">Final Hammer Price: ₹62,000</p>
+        <button class="btn btn-restart" id="btn-restart-auction">Restart Demo Lot</button>
+      </div>
+    </section>
+
+    <!-- Right Column: Interactive Bidding Console & Activity Feed -->
+    <section class="bidding-control-panel">
+      <!-- Bid Placement Controls -->
+      <div class="bid-action-box">
+        <h3>💰 Place Your Bid</h3>
+        <p class="min-next-hint">Min. Next Bid: <strong id="min-bid-display">₹52,000</strong></p>
+
+        <!-- Quick Bid Buttons -->
+        <div class="quick-bid-buttons">
+          <button class="btn-quick" data-add="2000">+₹2,000</button>
+          <button class="btn-quick" data-add="5000">+₹5,000</button>
+          <button class="btn-quick" data-add="10000">+₹10,000</button>
+          <button class="btn-quick" data-add="25000">+₹25,000</button>
+        </div>
+
+        <!-- Custom Bid Form -->
+        <form id="form-place-bid" class="bid-input-form">
+          <div class="input-currency-wrapper">
+            <span class="input-currency">₹</span>
+            <input type="number" id="input-bid-amount" placeholder="52000" min="52000" required>
+          </div>
+          <button type="submit" class="btn btn-place-bid" id="btn-submit-bid">
+            🚀 SUBMIT BID
+          </button>
+        </form>
+      </div>
+
+      <!-- Live Bid Audit Log -->
+      <div class="bid-history-box">
+        <div class="history-header">
+          <h3>📜 Live Bid History</h3>
+          <span class="history-count" id="history-count">0 Bids Placed</span>
+        </div>
+        <div class="history-scroll-list" id="history-list">
+          <!-- Dynamic bid records appear here -->
+          <div class="history-empty">No bids submitted yet. Be the first to bid!</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- User Setup Modal (Prompts for Bidder Nickname) -->
+  <div class="modal-overlay" id="username-modal">
+    <div class="modal-card">
+      <h2>🔨 Welcome to AuctionArena</h2>
+      <p>Enter your bidder handle to enter the live trading floor.</p>
+      <form id="form-user-login">
+        <div class="form-group">
+          <label>Your Bidder Name</label>
+          <input type="text" id="input-user-handle" placeholder="e.g. Vikram Malhotra" required autofocus>
+        </div>
+        <button type="submit" class="btn btn-enter-floor">ENTER BIDDING FLOOR</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
