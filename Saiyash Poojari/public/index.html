@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real-Time Live Auction & Bidding System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-container">
+      <div class="logo">
+        <h1>Live Auction System</h1>
+        <span id="socket-status" class="status-badge connected">Connected</span>
+      </div>
+
+      <div class="header-right">
+        <div class="auction-select-group">
+          <label for="auction-selector">Select Auction:</label>
+          <select id="auction-selector"></select>
+        </div>
+        <button id="demo-reset-btn" class="btn btn-secondary btn-sm">Reset Auction</button>
+        <div class="user-badge">
+          <span id="display-username">User</span>
+          <span id="display-wallet" class="wallet-text">₹100,000</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <div id="anti-snipe-banner" class="alert alert-warning hidden">
+      <strong>Anti-Snipe Protection:</strong> Bid placed in final seconds! Timer extended by 20s.
+    </div>
+
+    <div class="auction-grid">
+      <section class="card auction-card">
+        <div class="card-header flex-between">
+          <span id="item-category" class="tag">Category</span>
+          <span id="item-status-badge" class="status-pill active">Active</span>
+        </div>
+
+        <div class="item-body">
+          <div class="item-info">
+            <h2 id="item-title">Loading Item...</h2>
+            <p id="item-description">Loading item details...</p>
+            <div class="info-row">
+              <div><strong>Starting Price:</strong> <span id="starting-price">₹0</span></div>
+              <div><strong>Min Increment:</strong> <span id="min-increment">₹0</span></div>
+              <div><strong>Live Viewers:</strong> <span id="viewers-num">1</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bidding-status-box">
+          <div class="current-price-section">
+            <span class="label">Current Highest Bid</span>
+            <div class="price-value">₹<span id="current-bid-amount">0</span></div>
+            <div class="leader-info">Highest Bidder: <strong id="highest-bidder-name">No Bids Yet</strong></div>
+          </div>
+
+          <div class="timer-section" id="timer-box">
+            <span class="label">Time Remaining</span>
+            <div class="timer-value"><span id="timer-seconds">60</span> seconds</div>
+            <small class="text-muted">Anti-snipe resets timer to 20s if bid in &lt;15s</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="right-column">
+        <div class="card">
+          <div class="card-header flex-between">
+            <h3>Place Your Bid</h3>
+            <span id="your-bid-status" class="badge">Ready</span>
+          </div>
+          <div class="card-body">
+            <div id="bid-feedback-alert" class="alert hidden"></div>
+
+            <div class="quick-bid-buttons">
+              <button class="btn btn-outline" id="quick-min-btn">+Min Bid</button>
+              <button class="btn btn-outline" id="quick-5k-btn">+₹5,000</button>
+              <button class="btn btn-outline" id="quick-10k-btn">+₹10,000</button>
+            </div>
+
+            <form id="bid-form" class="form">
+              <div class="form-group">
+                <label for="bid-amount-input">Enter Bid Amount (₹):</label>
+                <input type="number" id="bid-amount-input" class="form-control" placeholder="Enter amount" required min="0" step="100">
+              </div>
+              <button type="submit" id="place-bid-btn" class="btn btn-primary btn-block">Place Bid</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="card history-card">
+          <div class="card-header flex-between">
+            <h3>Bid History Log</h3>
+            <span id="bid-count-badge" class="count-badge">0 Bids</span>
+          </div>
+          <div class="card-body table-container">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>Bidder</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody id="bid-history-tbody">
+                <tr class="empty-row"><td colspan="3">No bids placed yet.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div id="outbid-toast" class="toast-outbid hidden">
+    <div class="toast-body">
+      <strong>Outbid Alert!</strong>
+      <p id="outbid-toast-message">You were outbid by another bidder.</p>
+    </div>
+    <button id="counter-bid-btn" class="btn btn-warning btn-sm">Counter Bid</button>
+    <button id="close-outbid-toast" class="btn-close">&times;</button>
+  </div>
+
+  <div id="sold-modal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Auction Closed</h2>
+      <p id="sold-message">The auction timer has ended.</p>
+      <div class="result-box">
+        <div><strong>Winner:</strong> <span id="sold-winner-name">---</span></div>
+        <div><strong>Final Price:</strong> <span id="sold-final-price">₹0</span></div>
+      </div>
+      <div class="modal-buttons">
+        <button id="sold-close-btn" class="btn btn-secondary">Close</button>
+        <button id="sold-reset-btn" class="btn btn-primary">Restart Auction</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="join-modal" class="modal">
+    <div class="modal-content">
+      <h2>Join Auction Room</h2>
+      <p>Enter your bidder name to start participating in real-time bidding.</p>
+      <form id="join-form">
+        <div class="form-group">
+          <label for="username-input">Your Name / Handle:</label>
+          <input type="text" id="username-input" class="form-control" placeholder="e.g. Vikram" required autofocus maxlength="20">
+        </div>
+        <div class="form-group">
+          <label for="wallet-input">Starting Wallet Balance (₹):</label>
+          <input type="number" id="wallet-input" class="form-control" value="100000" min="10000" step="5000">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Enter Room</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
