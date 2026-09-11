@@ -1,190 +1,56 @@
-# 🔨 Assignment 15: Real-Time Live Auction & Bidding Engine (Socket.io)
-> **Track:** Backend & Real-Time Web | **Level:** Advanced | **Estimated Time:** 8–10 Hours  
-> **Tech Stack:** Node.js, Express.js, Socket.io, In-Memory State Engine, Timer Synchronizer, CORS
+# Pulse Auction
 
----
+A polished real-time live auction and bidding engine built with **Node.js, Express.js and Socket.io**.
 
-## 📌 1. Objective & Overview
+**Live Demo:**
+https://realtime-auction-platform-jmjk.onrender.com/
 
-Architect a mission-critical, low-latency **Real-Time Live Auction & Bidding Platform** using **Node.js, Express.js, and Socket.io**. Students will build an authoritative bidding engine that prevents race conditions, enforces minimum bid increments, broadcasts real-time outbid notifications, synchronizes live countdown timers across all connected bidders, and implements **Anti-Snipe Timer Extensions** (extending auction time if a bid arrives in the final seconds).
+## Features
+- Real-time bidding across browser tabs
+- Server-authoritative bid validation
+- Minimum bid increment enforcement
+- Self-outbid prevention
+- Targeted outbid notifications
+- Live bid activity history
+- Live viewer counter
+- Server-side countdown timer
+- Anti-snipe protection: bids in the final 15 seconds reset the clock to 20 seconds
+- Sold event when the timer reaches zero
+- Responsive dark trading-floor UI
 
-### Key Learning Outcomes:
-- Managing high-concurrency real-time transactional actions without race conditions.
-- Broadcasting instantaneous outbid alerts and live ticker price updates.
-- Implementing server-side countdown clocks and anti-sniping rules (soft-close timer reset).
-- Building an authoritative bid validation engine (min increment check, self-outbid prohibition, wallet balance simulation).
-- Maintaining an auditable live bid activity history feed per auction room.
-
----
-
-## 🛠️ 2. Tech Stack & Dependencies
+## Run locally
 
 ```bash
-# Initialize project
-npm init -y
-
-# Install dependencies
-npm install express socket.io cors dotenv uuid
-
-# Install development tools
-npm install -D nodemon
+npm install
+npm run dev
 ```
 
----
+Open `http://localhost:5000` in multiple browser tabs and join with different bidder names.
 
-## 🏷️ 3. Auction Data Model & Room State
+## Tech Stack
+Node.js · Express.js · Socket.io · CORS · In-memory state
 
-```javascript
-// In-Memory Auction Room State
-const auctions = {
-  "AUC_VINTAGE_99": {
-    id: "AUC_VINTAGE_99",
-    title: "1967 Vintage Fender Stratocaster",
-    description: "Original condition rare electric guitar",
-    startingPrice: 50000,
-    currentBid: 50000,
-    highestBidder: null, // { socketId, username }
-    minIncrement: 2000,
-    timeRemainingSeconds: 60,
-    status: "active", // "upcoming", "active", "ended"
-    bidHistory: [],
-    timerInterval: null
-  }
-};
-```
+## Screenshots
 
----
+<img width="1470" height="881" alt="Screenshot 2026-09-11 at 11 50 50 AM" src="https://github.com/user-attachments/assets/b16eef00-93be-4de3-9cb8-4cb72a4a3c22" />
 
-## 📡 4. Real-Time Socket Event Protocol
+<img width="1468" height="879" alt="Screenshot 2026-09-11 at 11 50 34 AM" src="https://github.com/user-attachments/assets/6931e4b2-38c5-48fa-b5d3-8f99f470f87f" />
 
-### 🔄 Room & Stream Events
+<img width="1470" height="881" alt="Screenshot 2026-09-11 at 11 50 17 AM" src="https://github.com/user-attachments/assets/7cad7b66-1f87-4b62-9490-9b2bdb148f07" />
 
-| Event Name | Direction | Payload Schema | Description |
-|---|:---:|---|---|
-| `auction:join` | `Client -> Server` | `{ "auctionId": "AUC_VINTAGE_99", "username": "Vikram" }` | Join the live bidding floor room |
-| `auction:init` | `Server -> Client` | `{ "item": { ... }, "bidHistory": [...], "timeRemaining": 45 }` | Hydrates current auction status to newly joined bidder |
-| `auction:time_tick` | `Server -> Room` | `{ "auctionId": "...", "timeRemaining": 44 }` | Broadcasted every 1 second |
-| `user:joined` | `Server -> Room` | `{ "username": "Vikram", "totalViewers": 14 }` | Updates live audience count |
 
-### 💰 Live Bidding Actions
-
-| Event Name | Direction | Payload Schema | Description |
-|---|:---:|---|---|
-| `bid:place` | `Client -> Server` | `{ "auctionId": "AUC_VINTAGE_99", "amount": 54000 }` | Bidder places a higher bid |
-| `bid:success` | `Server -> Room` | `{ "newBid": 54000, "highestBidder": "Vikram", "timeRemaining": 30 }` | Broadcasts new leading price to all participants |
-| `bid:outbid` | `Server -> Client` | `{ "message": "You have been outbid by Vikram at ₹54,000!" }` | Targeted alert sent strictly to the previous highest bidder |
-| `bid:rejected` | `Server -> Client` | `{ "reason": "Bid must be at least ₹56,000" }` | Rejection error sent to invalid bid attempt |
-| `auction:extended` | `Server -> Room` | `{ "message": "Anti-snipe triggered: +20 seconds added!" }` | Emitted when late bid extends the clock |
-| `auction:sold` | `Server -> Room` | `{ "winner": "Vikram", "finalPrice": 62000, "status": "sold" }` | Emitted when clock hits 0 and reserve met |
-
----
-
-## 🛡️ 5. Authoritative Bidding & Anti-Snipe Engine
-
-```javascript
-// sockets/auctionEngine.js
-function handleBidPlacement(io, socket, auction, bidAmount, username) {
-  // 1. Check if auction is active
-  if (auction.status !== 'active' || auction.timeRemainingSeconds <= 0) {
-    return socket.emit('bid:rejected', { reason: 'Auction is closed' });
-  }
-
-  // 2. Check if bidder is already the highest bidder
-  if (auction.highestBidder && auction.highestBidder.socketId === socket.id) {
-    return socket.emit('bid:rejected', { reason: 'You are already the highest bidder' });
-  }
-
-  // 3. Check minimum increment
-  const minimumRequired = auction.currentBid + auction.minIncrement;
-  if (bidAmount < minimumRequired) {
-    return socket.emit('bid:rejected', { 
-      reason: `Bid too low. Minimum valid bid is ₹${minimumRequired}` 
-    });
-  }
-
-  // 4. Capture previous highest bidder to notify outbid
-  const previousBidder = auction.highestBidder;
-
-  // 5. Update State
-  auction.currentBid = bidAmount;
-  auction.highestBidder = { socketId: socket.id, username };
-  auction.bidHistory.unshift({
-    bidder: username,
-    amount: bidAmount,
-    timestamp: new Date().toLocaleTimeString()
-  });
-
-  // 6. Anti-Snipe Rule: If bid placed within last 15s, extend timer back to 20s
-  if (auction.timeRemainingSeconds < 15) {
-    auction.timeRemainingSeconds = 20;
-    io.to(auction.id).emit('auction:extended', {
-      timeRemaining: 20,
-      message: 'Bid in final seconds: Timer extended by 20s!'
-    });
-  }
-
-  // 7. Broadcast new top bid to room
-  io.to(auction.id).emit('bid:success', {
-    currentBid: auction.currentBid,
-    highestBidder: username,
-    bidHistory: auction.bidHistory,
-    timeRemaining: auction.timeRemainingSeconds
-  });
-
-  // 8. Send private alert to outbid user
-  if (previousBidder && previousBidder.socketId !== socket.id) {
-    io.to(previousBidder.socketId).emit('bid:outbid', {
-      message: `You were outbid by ${username} with ₹${bidAmount}!`
-    });
-  }
-}
-```
-
----
-
-## 🏗️ 6. Directory Structure
-
+## Project Structure
 ```text
-assignment-15-auction-socket/
+PulseAuction/
 ├── public/
-│   ├── index.html           # Live bidding floor UI
-│   ├── app.js               # Client socket handlers & bid buttons
-│   └── style.css            # Dark trading floor aesthetic & animations
-├── sockets/
-│   ├── auctionEngine.js     # Bid validation, outbid alerts & anti-snipe logic
-│   └── timerManager.js      # Server-side 1s interval countdown clock
-├── server.js                # Server setup
+│   ├── index.html
+│   ├── app.js
+│   └── style.css
+├── server.js
 ├── package.json
 └── README.md
 ```
+## Author
 
----
-
-## 🧪 7. Testing & Verification
-
-1. Start the server on `http://localhost:5000`.
-2. Open three browser tabs on the auction page: Bidder A (Vikram), Bidder B (Ananya), and Viewer C.
-3. Place a bid from Vikram: verify all 3 screens update the current highest bid to ₹52,000.
-4. Place a higher bid from Ananya: verify Vikram instantly receives an **"Outbid Alert"** banner.
-5. Wait until the timer drops to 10 seconds, then place a bid: verify the clock jumps back to 20 seconds (**Anti-Snipe Protection**).
-6. Let the clock tick down to 0: verify the room emits `auction:sold` and further bids are rejected.
-
----
-
-## 📊 8. Grading Rubric (100 Marks)
-
-| Evaluation Component | Marks |
-|---|:---:|
-| **Real-Time Bid Processing & Validation Engine** | 30 |
-| **Server-Side Countdown Timer & Anti-Snipe Mechanism** | 25 |
-| **Targeted Outbid Notifications & Live Room Broadcasting** | 20 |
-| **Auditable Bid History Feed & Live Viewer Counter** | 15 |
-| **Trading Floor Client UI Polish, Audio/Visual Cues & Architecture** | 10 |
-| **Total Marks** | **100** |
-
----
-
-## 📤 9. Submission Guidelines
-
-- Push code to GitHub: `itm-assignment-15-auction-socket`.
-- Include a 1-minute video demo demonstrating concurrent bidding, outbid alerts, and anti-snipe extension.
+Jui Tawde
+Built from the requirements in Assignment 15: Real-Time Live Auction & Bidding Engine (Socket.io).
