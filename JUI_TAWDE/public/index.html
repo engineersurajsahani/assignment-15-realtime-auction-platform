@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pulse Auction — Live Bidding</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">P</span><span>Pulse<span class="brand-accent">Auction</span></span></div>
+    <div class="live-pill"><i></i> LIVE AUCTION</div>
+    <div class="viewer-chip">◉ <span id="viewerCount">1</span> watching</div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">LOT #AUC_VINTAGE_99</p>
+        <h1>1967 Vintage<br><span>Fender Stratocaster</span></h1>
+        <p class="description">Original condition rare electric guitar — a collector's piece with timeless character.</p>
+        <div class="tags"><span>Vintage</span><span>Collector's item</span><span>Original condition</span></div>
+      </div>
+      <div class="timer-card">
+        <div class="timer-label">TIME REMAINING</div>
+        <div id="timer" class="timer">01:00</div>
+        <div id="timerStatus" class="timer-status"><i></i> Auction active</div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="card bidding-card">
+        <div class="card-head"><div><p class="mini-label">CURRENT HIGHEST BID</p><div id="currentBid" class="price">₹50,000</div></div><div class="live-dot"></div></div>
+        <div class="leader">Leading bidder: <strong id="leader">No bids yet</strong></div>
+        <div id="alert" class="alert hidden"></div>
+
+        <div class="bid-box">
+          <label for="bidAmount">YOUR BID</label>
+          <div class="input-row"><span>₹</span><input id="bidAmount" type="number" min="52000" step="2000" placeholder="52,000"><button id="bidBtn">Place Bid <span>↗</span></button></div>
+          <div id="minBid" class="hint">Minimum valid bid: ₹52,000</div>
+        </div>
+
+        <div class="quick-bids">
+          <button data-add="2000">+ ₹2K</button><button data-add="5000">+ ₹5K</button><button data-add="10000">+ ₹10K</button><button data-add="20000">+ ₹20K</button>
+        </div>
+        <p class="secure">⌁ Server-authoritative bidding · Anti-snipe protection enabled</p>
+      </div>
+
+      <aside class="card history-card">
+        <div class="card-title"><span>Live bid activity</span><span class="pulse-icon">✦</span></div>
+        <div id="history" class="history"><div class="empty">No bids yet.<br>Be the first to make a move.</div></div>
+      </aside>
+    </section>
+  </main>
+
+  <div id="toast" class="toast"></div>
+  <div id="joinModal" class="modal">
+    <div class="modal-card">
+      <div class="modal-logo">P</div><h2>Enter the bidding floor</h2><p>Choose a bidder name to join this live auction.</p>
+      <input id="username" placeholder="Your bidder name" maxlength="24" autofocus>
+      <button id="joinBtn">Join Auction →</button>
+    </div>
+  </div>
+  <script src="/socket.io/socket.io.js"></script><script src="app.js"></script>
+</body>
+</html>
