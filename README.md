@@ -32,11 +32,12 @@ Node.js · Express.js · Socket.io · CORS · In-memory state
 
 ## Screenshots
 
-![](<Screenshot 2026-09-11 at 11.50.50 AM.png>)
+<img width="1470" height="881" alt="Screenshot 2026-09-11 at 11 50 50 AM" src="https://github.com/user-attachments/assets/b16eef00-93be-4de3-9cb8-4cb72a4a3c22" />
 
-![alt text](<Screenshot 2026-09-11 at 11.50.34 AM.png>)
+<img width="1468" height="879" alt="Screenshot 2026-09-11 at 11 50 34 AM" src="https://github.com/user-attachments/assets/6931e4b2-38c5-48fa-b5d3-8f99f470f87f" />
 
-![alt text](<Screenshot 2026-09-11 at 11.50.17 AM.png>)
+<img width="1470" height="881" alt="Screenshot 2026-09-11 at 11 50 17 AM" src="https://github.com/user-attachments/assets/7cad7b66-1f87-4b62-9490-9b2bdb148f07" />
+
 
 ## Project Structure
 ```text
@@ -49,5 +50,7 @@ PulseAuction/
 ├── package.json
 └── README.md
 ```
+## Author
 
+Jui Tawde
 Built from the requirements in Assignment 15: Real-Time Live Auction & Bidding Engine (Socket.io).
