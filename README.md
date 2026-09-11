@@ -2,6 +2,9 @@
 
 A polished real-time live auction and bidding engine built with **Node.js, Express.js and Socket.io**.
 
+**Live Demo:**
+https://realtime-auction-platform-jmjk.onrender.com/
+
 ## Features
 - Real-time bidding across browser tabs
 - Server-authoritative bid validation
