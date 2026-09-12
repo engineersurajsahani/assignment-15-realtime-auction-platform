@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Auction</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container">
+    <header>
+      <p class="label">LIVE AUCTION</p>
+      <h1>1967 Vintage Fender Stratocaster</h1>
+      <p>Original condition rare electric guitar</p>
+    </header>
+
+    <section id="joinPanel" class="card join-card">
+      <h2>Join Auction</h2>
+      <input id="username" type="text" placeholder="Enter your username">
+      <button id="joinBtn">Join Auction</button>
+      <p id="joinError" class="error"></p>
+    </section>
+
+    <section id="auctionPanel" class="hidden">
+      <div class="grid">
+        <div class="card price-card">
+          <p class="label">CURRENT BID</p>
+          <div id="currentBid" class="price">₹50,000</div>
+          <p>Highest bidder: <strong id="highestBidder">No bids yet</strong></p>
+        </div>
+
+        <div class="card timer-card">
+          <p class="label">TIME REMAINING</p>
+          <div id="timer">01:00</div>
+          <p id="timerMessage">Auction is live</p>
+        </div>
+
+        <div class="card viewer-card">
+          <p class="label">LIVE VIEWERS</p>
+          <div id="viewers">0</div>
+        </div>
+      </div>
+
+      <div id="alert" class="alert hidden"></div>
+
+      <div class="card bid-card">
+        <h2>Place Your Bid</h2>
+        <p>Minimum increment: ₹2,000</p>
+        <div class="bid-row">
+          <input id="bidAmount" type="number" min="52000" step="2000" placeholder="Enter bid">
+          <button id="bidBtn">Place Bid</button>
+        </div>
+        <p id="bidError" class="error"></p>
+      </div>
+
+      <div class="card">
+        <div class="history-header">
+          <h2>Live Bid History</h2>
+          <span id="status">ACTIVE</span>
+        </div>
+        <div id="history"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
