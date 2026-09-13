@@ -1,0 +1,826 @@
+:root {
+  --bg: #0b0d0c;
+  --surface: #111412;
+  --surface-2: #171a18;
+  --line: #292d2a;
+  --text: #f3f4ef;
+  --muted: #8d958e;
+  --accent: #d8b4ff;
+  --accent-2: #b98be8;
+  --danger: #ff8fa3;
+  --warning: #e8c7ff;
+  --shadow: 0 24px 80px rgba(0,0,0,.3);
+  --radius: 20px;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 72% 12%, rgba(216,180,255,.065), transparent 28%),
+    radial-gradient(circle at 10% 80%, rgba(216,180,255,.035), transparent 25%),
+    var(--bg);
+  color: var(--text);
+  font-family: "DM Sans", sans-serif;
+}
+
+button, input { font: inherit; }
+
+button { cursor: pointer; }
+
+.app-shell { min-height: 100vh; }
+
+.topbar {
+  height: 76px;
+  padding: 0 5vw;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  background: rgba(11,13,12,.78);
+  backdrop-filter: blur(18px);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+  text-decoration: none;
+  font: 700 20px "Space Grotesk", sans-serif;
+  letter-spacing: .08em;
+}
+
+.brand-mark {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  font-size: 17px;
+}
+
+.brand-dot { color: var(--accent); }
+
+.topbar-status, .auction-id {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+}
+
+.topbar-status { margin-left: auto; }
+
+.live-dot, .pulse, .activity-live i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px rgba(216,180,255,.09);
+}
+
+.live-dot { animation: blink 1.6s infinite; }
+
+.divider {
+  width: 1px;
+  height: 14px;
+  background: var(--line);
+  margin: 0 4px;
+}
+
+.auction-id {
+  padding-left: 22px;
+  border-left: 1px solid var(--line);
+}
+
+.auction-id strong {
+  color: var(--text);
+  font-size: 11px;
+}
+
+.main-content {
+  width: min(1400px, 90vw);
+  margin: 0 auto;
+  padding: 72px 0 50px;
+}
+
+.hero-row {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 46px;
+}
+
+.eyebrow {
+  margin: 0 0 11px;
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .18em;
+}
+
+h1, h2, h3, p { margin-top: 0; }
+
+h1 {
+  margin-bottom: 18px;
+  font: 600 clamp(44px, 6vw, 78px)/.93 "Space Grotesk", sans-serif;
+  letter-spacing: -.055em;
+}
+
+h1 span { color: var(--accent); }
+
+.hero-copy {
+  color: var(--muted);
+  max-width: 500px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.live-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.auction-grid {
+  display: grid;
+  grid-template-columns: 1.45fr .85fr;
+  gap: 20px;
+}
+
+.panel {
+  background: linear-gradient(145deg, rgba(25,29,26,.94), rgba(15,18,16,.96));
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.item-card { overflow: hidden; }
+
+.item-visual {
+  min-height: 500px;
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(ellipse at 52% 47%, rgba(191,156,80,.23), transparent 22%),
+    radial-gradient(ellipse at 50% 52%, rgba(87,70,41,.4), transparent 45%),
+    linear-gradient(135deg, #191b18, #0e100f 70%);
+}
+
+.item-visual::before {
+  content: "";
+  position: absolute;
+  inset: 8%;
+  border: 1px solid rgba(255,255,255,.05);
+  border-radius: 50%;
+  transform: rotate(-12deg) scaleX(1.5);
+}
+
+.grain {
+  position: absolute;
+  inset: 0;
+  opacity: .15;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
+}
+
+.guitar-silhouette {
+  width: min(510px, 75%);
+  height: 360px;
+  position: relative;
+  transform: rotate(-13deg);
+  filter: drop-shadow(0 25px 35px rgba(0,0,0,.55));
+}
+
+.guitar-body {
+  position: absolute;
+  width: 235px;
+  height: 255px;
+  left: 45px;
+  top: 74px;
+  border-radius: 48% 52% 43% 57%;
+  background: linear-gradient(135deg, #b77d38, #5b351d 60%, #251a13);
+  box-shadow: inset 22px 0 25px rgba(255,208,112,.13), inset -15px -20px 25px rgba(0,0,0,.45);
+}
+
+.guitar-body::after {
+  content: "";
+  position: absolute;
+  width: 78px;
+  height: 78px;
+  border: 16px solid #181b19;
+  border-radius: 50%;
+  top: 87px;
+  left: 90px;
+  box-shadow: 0 0 0 2px rgba(235,199,121,.25);
+}
+
+.guitar-neck {
+  position: absolute;
+  width: 290px;
+  height: 40px;
+  left: 200px;
+  top: 82px;
+  border-radius: 10px;
+  background: linear-gradient(#6c4b2e, #36251b);
+  box-shadow: inset 0 0 0 2px rgba(0,0,0,.3);
+  z-index: 2;
+}
+
+.guitar-neck::before {
+  content: "•  •  •  •  •  •  •";
+  position: absolute;
+  color: rgba(255,224,168,.25);
+  font-size: 10px;
+  letter-spacing: 19px;
+  top: 13px;
+  left: 22px;
+}
+
+.guitar-pickguard {
+  position: absolute;
+  width: 105px;
+  height: 130px;
+  background: #d8d0bc;
+  left: 114px;
+  top: 113px;
+  border-radius: 45% 20% 50% 35%;
+  transform: rotate(-18deg);
+  opacity: .82;
+  z-index: 3;
+}
+
+.guitar-strings {
+  position: absolute;
+  width: 390px;
+  height: 2px;
+  left: 110px;
+  top: 104px;
+  background: rgba(255,255,255,.45);
+  box-shadow: 0 4px rgba(255,255,255,.28), 0 8px rgba(255,255,255,.2);
+  z-index: 5;
+}
+
+.item-label, .condition-badge {
+  position: absolute;
+  top: 24px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .16em;
+}
+
+.item-label { left: 26px; color: rgba(255,255,255,.5); }
+.condition-badge {
+  right: 26px;
+  padding: 8px 10px;
+  border: 1px solid rgba(216,180,255,.25);
+  border-radius: 7px;
+  color: var(--accent);
+  background: rgba(216,180,255,.05);
+}
+
+.item-info {
+  padding: 27px 30px 30px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 30px;
+}
+
+.item-category {
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: .14em;
+  margin-bottom: 10px;
+}
+
+.item-info h2 {
+  margin-bottom: 9px;
+  font: 600 26px "Space Grotesk", sans-serif;
+}
+
+.item-info p:last-child {
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.item-meta {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+}
+
+.item-meta div {
+  display: grid;
+  gap: 6px;
+  min-width: 120px;
+}
+
+.item-meta span {
+  color: var(--muted);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+
+.item-meta strong { font-size: 14px; }
+
+.bid-panel {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: start;
+}
+
+.current-price {
+  font: 600 clamp(37px, 4vw, 55px) "Space Grotesk", sans-serif;
+  letter-spacing: -.045em;
+  margin-top: 2px;
+}
+
+.status-chip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 10px;
+  background: rgba(216,180,255,.08);
+  border: 1px solid rgba(216,180,255,.18);
+  color: var(--accent);
+  border-radius: 7px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .13em;
+}
+
+.status-chip span {
+  width: 5px;
+  height: 5px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+
+.countdown-wrap {
+  margin: 35px 0 22px;
+  padding: 22px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.countdown-label {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .12em;
+}
+
+.countdown {
+  font: 600 60px/1 "Space Grotesk", sans-serif;
+  letter-spacing: -.06em;
+  margin: 13px 0 14px;
+}
+
+.progress-track {
+  height: 3px;
+  background: #292d2a;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 100%;
+  background: var(--accent);
+  transition: width .9s linear;
+}
+
+.leader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 0;
+}
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  background: #20251f;
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.leader div:nth-child(2) {
+  display: grid;
+  gap: 3px;
+}
+
+.leader span {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.leader strong { font-size: 13px; }
+
+.crown {
+  margin-left: auto;
+  color: var(--accent);
+  font-size: 20px;
+}
+
+.bid-actions { margin-top: auto; padding-top: 16px; }
+
+.bid-actions > label, .join-panel > label {
+  display: block;
+  margin-bottom: 9px;
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .13em;
+}
+
+.bid-input-wrap, .name-input-wrap {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--line);
+  background: #0d100e;
+  border-radius: 12px;
+  padding: 0 15px;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.bid-input-wrap:focus-within, .name-input-wrap:focus-within {
+  border-color: rgba(200,243,107,.45);
+  box-shadow: 0 0 0 4px rgba(216,180,255,.05);
+}
+
+.bid-input-wrap > span, .name-input-wrap > span {
+  color: var(--accent);
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  color: var(--text);
+  background: transparent;
+}
+
+input::placeholder { color: #555d57; }
+
+.bid-input-wrap input {
+  font: 600 22px "Space Grotesk", sans-serif;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+.quick-bids {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.quick-btn {
+  padding: 9px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+  transition: .2s;
+}
+
+.quick-btn:hover { color: var(--text); border-color: #444b45; background: #191d1a; }
+
+.place-bid, .join-btn {
+  width: 100%;
+  height: 56px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--accent);
+  color: #10140d;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  transition: transform .2s, box-shadow .2s, opacity .2s;
+}
+
+.place-bid:not(:disabled):hover, .join-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 13px 35px rgba(216,180,255,.14);
+}
+
+.place-bid:disabled { opacity: .3; cursor: not-allowed; }
+
+.arrow { font-size: 20px; }
+
+.bid-note {
+  margin: 10px 0 0;
+  color: #626a64;
+  text-align: center;
+  font-size: 9px;
+}
+
+.lower-grid {
+  display: grid;
+  grid-template-columns: 1.45fr .85fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.activity-panel, .join-panel { padding: 26px; }
+
+.section-heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.section-heading h3 {
+  margin: 0;
+  font: 600 20px "Space Grotesk", sans-serif;
+}
+
+.activity-live {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: .08em;
+}
+
+.activity-live i { width: 5px; height: 5px; }
+
+.bid-history {
+  max-height: 290px;
+  overflow: auto;
+  padding-right: 5px;
+}
+
+.bid-history::-webkit-scrollbar { width: 4px; }
+.bid-history::-webkit-scrollbar-thumb { background: #343a35; border-radius: 4px; }
+
+.bid-row {
+  display: grid;
+  grid-template-columns: 38px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+  animation: slideIn .35s ease both;
+}
+
+.bid-mini-avatar {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: #1b211b;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.bid-row-main {
+  display: grid;
+  gap: 3px;
+}
+
+.bid-row-main strong { font-size: 12px; }
+.bid-row-main span { color: var(--muted); font-size: 9px; }
+
+.bid-row-price {
+  text-align: right;
+  display: grid;
+  gap: 3px;
+}
+
+.bid-row-price strong { font: 600 15px "Space Grotesk", sans-serif; }
+.bid-row-price span { color: var(--accent); font-size: 8px; letter-spacing: .1em; }
+
+.empty-state {
+  min-height: 180px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 8px;
+  color: #5d655f;
+  text-align: center;
+}
+
+.empty-state span { font-size: 26px; color: var(--accent); opacity: .5; }
+.empty-state p { font-size: 11px; }
+
+.join-copy {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.55;
+  margin-bottom: 22px;
+}
+
+.name-input-wrap { margin-bottom: 10px; }
+.name-input-wrap input { font-size: 13px; }
+
+.connection-text {
+  margin: 12px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.connection-text i {
+  width: 6px;
+  height: 6px;
+  background: var(--warning);
+  border-radius: 50%;
+}
+
+.connection-text.connected { color: var(--accent); }
+.connection-text.connected i { background: var(--accent); }
+
+.footer {
+  width: min(1400px, 90vw);
+  margin: 0 auto;
+  padding: 28px 0 45px;
+  display: flex;
+  justify-content: space-between;
+  color: #515852;
+  font-size: 8px;
+  letter-spacing: .14em;
+  font-weight: 700;
+}
+
+.toast-container {
+  position: fixed;
+  right: 24px;
+  top: 94px;
+  z-index: 50;
+  display: grid;
+  gap: 10px;
+  width: min(360px, calc(100vw - 48px));
+}
+
+.toast {
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #191d1a;
+  border: 1px solid #353c36;
+  box-shadow: 0 18px 45px rgba(0,0,0,.4);
+  font-size: 11px;
+  line-height: 1.45;
+  animation: toastIn .35s ease both;
+}
+
+.toast.success { border-color: rgba(216,180,255,.35); }
+.toast.danger { border-color: rgba(255,143,163,.35); }
+.toast.warning { border-color: rgba(232,199,255,.35); }
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(5,7,6,.78);
+  backdrop-filter: blur(12px);
+  display: grid;
+  place-items: center;
+  z-index: 100;
+  padding: 24px;
+}
+
+.hidden { display: none; }
+
+.result-modal {
+  width: min(430px, 100%);
+  text-align: center;
+  padding: 42px 34px 34px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: #131714;
+  box-shadow: 0 30px 100px rgba(0,0,0,.55);
+}
+
+.result-icon {
+  width: 62px;
+  height: 62px;
+  margin: 0 auto 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(216,180,255,.08);
+  border: 1px solid rgba(200,243,107,.2);
+  color: var(--accent);
+  font-size: 26px;
+}
+
+.result-modal h2 {
+  margin-bottom: 9px;
+  font: 600 34px "Space Grotesk", sans-serif;
+}
+
+.result-modal p:not(.eyebrow) {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+@keyframes blink { 50% { opacity: .35; } }
+@keyframes slideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes toastIn { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: translateX(0); } }
+
+@media (max-width: 980px) {
+  .auction-grid, .lower-grid { grid-template-columns: 1fr; }
+  .item-visual { min-height: 400px; }
+  .bid-panel { min-height: 650px; }
+}
+
+@media (max-width: 650px) {
+  .topbar { padding: 0 5%; }
+  .topbar-status { display: none; }
+  .auction-id { margin-left: auto; padding-left: 0; border: 0; }
+  .main-content { width: 92vw; padding-top: 45px; }
+  .hero-row { display: block; }
+  .live-pill { display: inline-flex; margin-top: 10px; }
+  h1 { font-size: 47px; }
+  .item-visual { min-height: 330px; }
+  .item-info { grid-template-columns: 1fr; padding: 22px; }
+  .item-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .bid-panel { padding: 22px; min-height: 600px; }
+  .footer { display: grid; gap: 10px; }
+}
+
+
+/* Premium editorial palette: graphite, ivory and electric violet.
+   Deliberately avoids the usual blue/orange/green dashboard colors. */
+.item-info h2,
+.section-heading h3,
+.result-modal h2 {
+  color: #f4efe7;
+}
+
+.item-info h2::selection,
+.section-heading h3::selection,
+.result-modal h2::selection {
+  background: rgba(216,180,255,.28);
+}
+
+.live-pill {
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.015);
+}
+
+.panel:hover {
+  border-color: #343934;
+  transition: border-color .25s ease;
+}
+
+.place-bid:not(:disabled):hover,
+.join-btn:hover {
+  box-shadow: 0 13px 35px rgba(216,180,255,.16);
+}

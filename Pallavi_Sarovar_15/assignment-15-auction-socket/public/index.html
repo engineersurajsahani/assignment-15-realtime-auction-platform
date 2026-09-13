@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Real-time live auction and bidding engine powered by Socket.io." />
+  <title>Vault Auction — Live Bidding</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Vault Auction home">
+        <span class="brand-mark">V</span>
+        <span>VAULT<span class="brand-dot">.</span></span>
+      </a>
+
+      <div class="topbar-status">
+        <span class="live-dot"></span>
+        <span>LIVE AUCTION</span>
+        <span class="divider"></span>
+        <span id="viewerCount">0 watching</span>
+      </div>
+
+      <div class="auction-id">
+        <span>ROOM</span>
+        <strong id="auctionId">AUC_VINTAGE_99</strong>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <section class="hero-row">
+        <div>
+          <p class="eyebrow">CURATED COLLECTIBLES / LIVE FLOOR</p>
+          <h1>Own something<br><span>extraordinary.</span></h1>
+          <p class="hero-copy">A transparent, real-time bidding floor where every bid counts.</p>
+        </div>
+        <div class="live-pill"><span class="pulse"></span> Real-time bidding</div>
+      </section>
+
+      <section class="auction-grid">
+        <article class="item-card panel">
+          <div class="item-visual">
+            <div class="grain"></div>
+            <div class="guitar-silhouette">
+              <div class="guitar-neck"></div>
+              <div class="guitar-body"></div>
+              <div class="guitar-pickguard"></div>
+              <div class="guitar-strings"></div>
+            </div>
+            <span class="item-label">LOT 001</span>
+            <span class="condition-badge">VINTAGE / 1967</span>
+          </div>
+
+          <div class="item-info">
+            <div>
+              <p class="item-category">FENDER / STRATOCASTER</p>
+              <h2 id="itemTitle">1967 Vintage Fender Stratocaster</h2>
+              <p id="itemDescription">Original-condition vintage electric guitar with a rare sunburst finish.</p>
+            </div>
+
+            <div class="item-meta">
+              <div>
+                <span>Starting price</span>
+                <strong id="startingPrice">₹50,000</strong>
+              </div>
+              <div>
+                <span>Minimum increment</span>
+                <strong id="minIncrement">₹2,000</strong>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <aside class="bid-panel panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">CURRENT BID</p>
+              <div class="current-price" id="currentBid">₹50,000</div>
+            </div>
+            <div class="status-chip" id="statusChip"><span></span> LIVE</div>
+          </div>
+
+          <div class="countdown-wrap">
+            <div class="countdown-label">
+              <span>TIME REMAINING</span>
+              <span id="timerState">Accepting bids</span>
+            </div>
+            <div class="countdown" id="countdown">01:00</div>
+            <div class="progress-track">
+              <div class="progress-bar" id="progressBar"></div>
+            </div>
+          </div>
+
+          <div class="leader">
+            <div class="avatar" id="leaderAvatar">—</div>
+            <div>
+              <span>Leading bidder</span>
+              <strong id="highestBidder">No bids yet</strong>
+            </div>
+            <span class="crown">♛</span>
+          </div>
+
+          <div class="bid-actions">
+            <label for="bidAmount">YOUR BID</label>
+            <div class="bid-input-wrap">
+              <span>₹</span>
+              <input id="bidAmount" type="number" min="52000" step="1000" placeholder="52,000" inputmode="numeric" />
+            </div>
+
+            <div class="quick-bids">
+              <button class="quick-btn" data-step="2000">+ ₹2K</button>
+              <button class="quick-btn" data-step="5000">+ ₹5K</button>
+              <button class="quick-btn" data-step="10000">+ ₹10K</button>
+            </div>
+
+            <button id="placeBidBtn" class="place-bid" disabled>
+              <span>PLACE BID</span>
+              <span class="arrow">↗</span>
+            </button>
+
+            <p class="bid-note">Bids are binding. The server validates every bid in real time.</p>
+          </div>
+        </aside>
+      </section>
+
+      <section class="lower-grid">
+        <article class="panel activity-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">LIVE FEED</p>
+              <h3>Bid activity</h3>
+            </div>
+            <span class="activity-live"><i></i> Updating live</span>
+          </div>
+          <div id="bidHistory" class="bid-history">
+            <div class="empty-state">
+              <span>◌</span>
+              <p>Waiting for the first bid…</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel join-panel" id="joinPanel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">YOUR IDENTITY</p>
+              <h3>Join the floor</h3>
+            </div>
+          </div>
+
+          <p class="join-copy">Choose a display name to participate in the live auction.</p>
+
+          <label for="username">DISPLAY NAME</label>
+          <div class="name-input-wrap">
+            <span>@</span>
+            <input id="username" type="text" maxlength="24" placeholder="e.g. Vikram" autocomplete="nickname" />
+          </div>
+
+          <button id="joinBtn" class="join-btn">JOIN AUCTION <span>→</span></button>
+          <p id="connectionText" class="connection-text"><i></i> Connecting to auction server…</p>
+        </article>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>VAULT AUCTIONS</span>
+      <span>SECURE REAL-TIME BIDDING</span>
+      <span>SOCKET.IO ENGINE</span>
+    </footer>
+  </div>
+
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <div class="modal-backdrop hidden" id="resultModal">
+    <div class="result-modal">
+      <span class="result-icon" id="resultIcon">♛</span>
+      <p class="eyebrow" id="resultEyebrow">AUCTION COMPLETE</p>
+      <h2 id="resultTitle">Sold!</h2>
+      <p id="resultMessage"></p>
+      <button id="closeResult" class="join-btn">BACK TO AUCTION</button>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
