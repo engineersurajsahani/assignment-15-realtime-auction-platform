@@ -1,0 +1,18 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui; background: #12121c; color: #eee; padding: 24px; }
+.card { max-width: 600px; margin: 0 auto; background: #1e1e2f; border-radius: 12px; padding: 24px; }
+h1 { font-size: 22px; margin-bottom: 4px; }
+.desc { opacity: 0.7; margin-bottom: 16px; }
+.price { font-size: 42px; font-weight: 700; color: #4cd787; margin: 12px 0; }
+.timer { font-size: 24px; color: #ff5252; margin-bottom: 12px; }
+.timer.extended { animation: pulse 0.5s; }
+@keyframes pulse { 0% { transform: scale(1.3); } 100% { transform: scale(1); } }
+#bidder { opacity: 0.8; margin-bottom: 16px; }
+.bidRow { display: flex; gap: 8px; margin-bottom: 16px; }
+input, button { padding: 12px; border-radius: 8px; border: none; font-size: 16px; }
+input { flex: 1; background: #2a2a3d; color: #fff; }
+button { background: #4c5fd7; color: #fff; cursor: pointer; font-weight: 600; }
+#alerts { min-height: 24px; margin-bottom: 12px; color: #ffb300; }
+#history { max-height: 200px; overflow-y: auto; }
+.hist-item { padding: 6px 0; border-bottom: 1px solid #2a2a3d; font-size: 14px; }
+#viewers { opacity: 0.6; font-size: 13px; margin-bottom: 8px; }

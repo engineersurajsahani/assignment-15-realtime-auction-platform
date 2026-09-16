@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Live Auction</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="card">
+    <div id="viewers">👀 0 viewers</div>
+    <h1 id="title"></h1>
+    <div class="desc" id="description"></div>
+    <div class="timer" id="timer"></div>
+    <div class="price" id="price"></div>
+    <div id="bidder"></div>
+    <div id="alerts"></div>
+    <div class="bidRow">
+      <input id="bidInput" type="number" placeholder="Enter your bid amount" />
+      <button id="bidBtn">Place Bid</button>
+    </div>
+    <h3>Bid History</h3>
+    <div id="history"></div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
