@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Auction & Bidding Floor</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <div class="auction-app">
+    <div class="header">
+      <h2>Live Auction Floor</h2>
+      <p class="student-info">Samarth Navale (150096725148)</p>
+    </div>
+
+    <div id="joinBox" class="card">
+      <label>Your Name: <input type="text" id="usernameInput" value="Bidder 1"></label>
+      <button id="joinBtn" class="btn">Enter Bidding Floor</button>
+    </div>
+
+    <div id="outbidAlert" class="alert alert-danger" style="display: none;"></div>
+    <div id="extendedAlert" class="alert alert-warning" style="display: none;"></div>
+    <div id="errorAlert" class="alert alert-danger" style="display: none;"></div>
+
+    <div id="auctionContent" style="display: none;">
+      <div class="main-grid">
+        <div class="card item-card">
+          <h3 id="itemTitle">1967 Vintage Fender Stratocaster</h3>
+          <p id="itemDesc" class="desc">Original condition rare electric guitar</p>
+          
+          <div class="price-box">
+            <div class="price-label">Current Highest Bid</div>
+            <div class="current-price" id="currentPrice">₹50,000</div>
+            <div class="highest-bidder">Leader: <span id="highestBidder">None</span></div>
+          </div>
+
+          <div class="timer-box">
+            Time Remaining: <span id="timerText" class="timer-val">60s</span>
+          </div>
+
+          <div class="bidding-controls">
+            <div class="quick-btns">
+              <button class="btn btn-outline" id="quickBidMin">+₹2,000</button>
+              <button class="btn btn-outline" id="quickBid5k">+₹5,000</button>
+              <button class="btn btn-outline" id="quickBid10k">+₹10,000</button>
+            </div>
+
+            <div class="custom-bid">
+              <input type="number" id="customBidInput" placeholder="Enter custom bid">
+              <button id="placeBidBtn" class="btn btn-primary">Place Bid</button>
+            </div>
+          </div>
+
+          <div class="viewers-count">
+            👀 Live Viewers: <span id="viewersCount">1</span>
+          </div>
+        </div>
+
+        <div class="card history-card">
+          <h3>Live Bid Activity Feed</h3>
+          <ul id="historyList" class="history-list"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
