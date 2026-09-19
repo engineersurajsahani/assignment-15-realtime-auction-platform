@@ -1,0 +1,160 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f6f9;
+  color: #333;
+  padding: 20px;
+}
+
+.auction-app {
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: 15px;
+}
+
+.student-info {
+  font-size: 13px;
+  color: #666;
+}
+
+.card {
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.main-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 15px;
+}
+
+.desc {
+  font-size: 13px;
+  color: #555;
+  margin: 6px 0 12px 0;
+}
+
+.price-box {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.price-label {
+  font-size: 12px;
+  color: #777;
+}
+
+.current-price {
+  font-size: 28px;
+  font-weight: bold;
+  color: #28a745;
+  margin: 4px 0;
+}
+
+.highest-bidder {
+  font-size: 13px;
+  color: #444;
+}
+
+.timer-box {
+  font-size: 16px;
+  font-weight: bold;
+  color: #dc3545;
+  margin-bottom: 15px;
+}
+
+.quick-btns {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.custom-bid {
+  display: flex;
+  gap: 8px;
+}
+
+.custom-bid input {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.btn {
+  padding: 7px 14px;
+  border-radius: 3px;
+  font-size: 13px;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.btn-primary {
+  background: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+.btn-outline {
+  background: #fff;
+  color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-outline:hover {
+  background: #007bff;
+  color: #fff;
+}
+
+.alert {
+  padding: 10px 15px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.alert-danger {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.alert-warning {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}
+
+.history-list {
+  list-style: none;
+  max-height: 250px;
+  overflow-y: auto;
+  margin-top: 10px;
+}
+
+.history-list li {
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 12px;
+}
+
+.viewers-count {
+  font-size: 12px;
+  color: #777;
+  margin-top: 15px;
+}
