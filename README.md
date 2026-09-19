@@ -1,12 +1,14 @@
 # 🔨 Assignment 15: Real-Time Live Auction & Bidding Engine (Socket.io)
-> **Track:** Backend & Real-Time Web | **Level:** Advanced | **Estimated Time:** 8–10 Hours  
-> **Tech Stack:** Node.js, Express.js, Socket.io, In-Memory State Engine, Timer Synchronizer, CORS
+
+**Track:** Backend & Real-Time Web | **Level:** Advanced | **Estimated Time:** 8–10 Hours  
+**Tech Stack:** Node.js, Express.js, Socket.io, In-Memory State Engine, Timer Synchronizer, CORS  
+**Live Deployment:** [https://assignment-15-realtime-auction-platform-t577.onrender.com](https://assignment-15-realtime-auction-platform-t577.onrender.com/)
 
 ---
 
 ## 📌 1. Objective & Overview
 
-Architect a mission-critical, low-latency **Real-Time Live Auction & Bidding Platform** using **Node.js, Express.js, and Socket.io**. Students will build an authoritative bidding engine that prevents race conditions, enforces minimum bid increments, broadcasts real-time outbid notifications, synchronizes live countdown timers across all connected bidders, and implements **Anti-Snipe Timer Extensions** (extending auction time if a bid arrives in the final seconds).
+Architect a mission-critical, low-latency Real-Time Live Auction & Bidding Platform using **Node.js**, **Express.js**, and **Socket.io**. Build an authoritative bidding engine that prevents race conditions, enforces minimum bid increments, broadcasts real-time outbid notifications, synchronizes live countdown timers across all connected bidders, and implements **Anti-Snipe Timer Extensions** (extending auction time if a bid arrives in the final seconds).
 
 ### Key Learning Outcomes:
 - Managing high-concurrency real-time transactional actions without race conditions.
@@ -19,15 +21,25 @@ Architect a mission-critical, low-latency **Real-Time Live Auction & Bidding Pla
 
 ## 🛠️ 2. Tech Stack & Dependencies
 
+### Project Initialization & Dependencies
 ```bash
 # Initialize project
 npm init -y
 
-# Install dependencies
+# Install production dependencies
 npm install express socket.io cors dotenv uuid
 
 # Install development tools
 npm install -D nodemon
+```
+
+### Running the Server
+```bash
+# Start production server
+npm start
+
+# Start with nodemon (development mode)
+npm run dev
 ```
 
 ---
@@ -46,7 +58,7 @@ const auctions = {
     highestBidder: null, // { socketId, username }
     minIncrement: 2000,
     timeRemainingSeconds: 60,
-    status: "active", // "upcoming", "active", "ended"
+    status: "active", // "upcoming", "active", "ended", "sold"
     bidHistory: [],
     timerInterval: null
   }
@@ -60,22 +72,24 @@ const auctions = {
 ### 🔄 Room & Stream Events
 
 | Event Name | Direction | Payload Schema | Description |
-|---|:---:|---|---|
-| `auction:join` | `Client -> Server` | `{ "auctionId": "AUC_VINTAGE_99", "username": "Vikram" }` | Join the live bidding floor room |
-| `auction:init` | `Server -> Client` | `{ "item": { ... }, "bidHistory": [...], "timeRemaining": 45 }` | Hydrates current auction status to newly joined bidder |
-| `auction:time_tick` | `Server -> Room` | `{ "auctionId": "...", "timeRemaining": 44 }` | Broadcasted every 1 second |
-| `user:joined` | `Server -> Room` | `{ "username": "Vikram", "totalViewers": 14 }` | Updates live audience count |
+| :--- | :--- | :--- | :--- |
+| `auction:join` | Client -> Server | `{ "auctionId": "AUC_VINTAGE_99", "username": "Vikram" }` | Join the live bidding floor room |
+| `auction:init` | Server -> Client | `{ "item": { ... }, "bidHistory": [...], "timeRemaining": 45 }` | Hydrates current auction status to newly joined bidder |
+| `auction:time_tick` | Server -> Room | `{ "auctionId": "...", "timeRemaining": 44 }` | Broadcasted every 1 second by authoritative server clock |
+| `user:joined` | Server -> Room | `{ "username": "Vikram", "totalViewers": 14 }` | Updates live audience count when a participant joins |
+| `user:left` | Server -> Room | `{ "username": "Vikram", "totalViewers": 13 }` | Updates live audience count when a participant leaves |
 
 ### 💰 Live Bidding Actions
 
 | Event Name | Direction | Payload Schema | Description |
-|---|:---:|---|---|
-| `bid:place` | `Client -> Server` | `{ "auctionId": "AUC_VINTAGE_99", "amount": 54000 }` | Bidder places a higher bid |
-| `bid:success` | `Server -> Room` | `{ "newBid": 54000, "highestBidder": "Vikram", "timeRemaining": 30 }` | Broadcasts new leading price to all participants |
-| `bid:outbid` | `Server -> Client` | `{ "message": "You have been outbid by Vikram at ₹54,000!" }` | Targeted alert sent strictly to the previous highest bidder |
-| `bid:rejected` | `Server -> Client` | `{ "reason": "Bid must be at least ₹56,000" }` | Rejection error sent to invalid bid attempt |
-| `auction:extended` | `Server -> Room` | `{ "message": "Anti-snipe triggered: +20 seconds added!" }` | Emitted when late bid extends the clock |
-| `auction:sold` | `Server -> Room` | `{ "winner": "Vikram", "finalPrice": 62000, "status": "sold" }` | Emitted when clock hits 0 and reserve met |
+| :--- | :--- | :--- | :--- |
+| `bid:place` | Client -> Server | `{ "auctionId": "AUC_VINTAGE_99", "amount": 54000 }` | Bidder places a higher bid |
+| `bid:success` | Server -> Room | `{ "newBid": 54000, "highestBidder": "Vikram", "timeRemaining": 30 }` | Broadcasts new leading price to all participants |
+| `bid:outbid` | Server -> Client | `{ "message": "You have been outbid by Vikram at ₹54,000!" }` | Targeted alert sent strictly to the previous highest bidder |
+| `bid:rejected` | Server -> Client | `{ "reason": "Bid must be at least ₹56,000" }` | Rejection error sent to invalid bid attempt |
+| `auction:extended` | Server -> Room | `{ "message": "Anti-snipe triggered: +20 seconds added!" }` | Emitted when late bid extends the clock |
+| `auction:sold` | Server -> Room | `{ "winner": "Vikram", "finalPrice": 62000, "status": "sold" }` | Emitted when clock hits 0 and reserve met |
+| `auction:ended` | Server -> Room | `{ "winner": null, "finalPrice": 50000, "status": "ended" }` | Emitted when clock hits 0 without bids |
 
 ---
 
@@ -119,7 +133,7 @@ function handleBidPlacement(io, socket, auction, bidAmount, username) {
     auction.timeRemainingSeconds = 20;
     io.to(auction.id).emit('auction:extended', {
       timeRemaining: 20,
-      message: 'Bid in final seconds: Timer extended by 20s!'
+      message: 'Anti-snipe triggered: +20 seconds added!'
     });
   }
 
@@ -144,7 +158,7 @@ function handleBidPlacement(io, socket, auction, bidAmount, username) {
 
 ## 🏗️ 6. Directory Structure
 
-```text
+```
 assignment-15-auction-socket/
 ├── public/
 │   ├── index.html           # Live bidding floor UI
@@ -157,34 +171,3 @@ assignment-15-auction-socket/
 ├── package.json
 └── README.md
 ```
-
----
-
-## 🧪 7. Testing & Verification
-
-1. Start the server on `http://localhost:5000`.
-2. Open three browser tabs on the auction page: Bidder A (Vikram), Bidder B (Ananya), and Viewer C.
-3. Place a bid from Vikram: verify all 3 screens update the current highest bid to ₹52,000.
-4. Place a higher bid from Ananya: verify Vikram instantly receives an **"Outbid Alert"** banner.
-5. Wait until the timer drops to 10 seconds, then place a bid: verify the clock jumps back to 20 seconds (**Anti-Snipe Protection**).
-6. Let the clock tick down to 0: verify the room emits `auction:sold` and further bids are rejected.
-
----
-
-## 📊 8. Grading Rubric (100 Marks)
-
-| Evaluation Component | Marks |
-|---|:---:|
-| **Real-Time Bid Processing & Validation Engine** | 30 |
-| **Server-Side Countdown Timer & Anti-Snipe Mechanism** | 25 |
-| **Targeted Outbid Notifications & Live Room Broadcasting** | 20 |
-| **Auditable Bid History Feed & Live Viewer Counter** | 15 |
-| **Trading Floor Client UI Polish, Audio/Visual Cues & Architecture** | 10 |
-| **Total Marks** | **100** |
-
----
-
-## 📤 9. Submission Guidelines
-
-- Push code to GitHub: `itm-assignment-15-auction-socket`.
-- Include a 1-minute video demo demonstrating concurrent bidding, outbid alerts, and anti-snipe extension.
