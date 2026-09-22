@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Live Auction Floor</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div id="joinSection" class="panel">
+    <h1>Live Auction</h1>
+    <input id="auctionIdInput" type="text" placeholder="Auction ID" value="AUC_VINTAGE_99" />
+    <input id="usernameInput" type="text" placeholder="Your name" />
+    <button id="joinButton">Join Auction</button>
+    <p id="joinError" class="errorText"></p>
+  </div>
+
+  <div id="floorSection" class="panel hidden">
+    <div id="outbidAlert" class="alertBanner hidden"></div>
+    <div id="soldBanner" class="soldBanner hidden"></div>
+
+    <div class="floorHeader">
+      <span id="viewerCount"></span>
+      <span id="timerDisplay" class="timer"></span>
+    </div>
+
+    <h2 id="itemTitle"></h2>
+    <p id="itemDescription" class="description"></p>
+
+    <div class="bidStats">
+      <div>
+        <span class="label">Current Bid</span>
+        <div id="currentBidDisplay" class="currentBid"></div>
+      </div>
+      <div>
+        <span class="label">Min Increment</span>
+        <div id="minIncrementDisplay"></div>
+      </div>
+    </div>
+
+    <p id="highestBidderDisplay"></p>
+
+    <div class="bidForm">
+      <input id="bidAmountInput" type="number" placeholder="Enter your bid" />
+      <button id="placeBidButton">Place Bid</button>
+    </div>
+    <p id="bidError" class="errorText"></p>
+
+    <h3>Bid History</h3>
+    <ul id="bidHistoryList" class="bidHistoryList"></ul>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

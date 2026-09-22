@@ -1,0 +1,176 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f2f2f2;
+  color: #222;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.panel {
+  max-width: 480px;
+  margin: 50px auto;
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.panel h1 {
+  text-align: center;
+  margin-top: 0;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  font-size: 15px;
+  background: #fff;
+  border: 1px solid #ccc;
+  color: #222;
+  border-radius: 4px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 14px;
+  font-size: 15px;
+  background: #4a76a8;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.errorText {
+  color: #c0392b;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* ---------- Floor header ---------- */
+
+.floorHeader {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 10px;
+}
+
+.timer {
+  font-weight: bold;
+  font-size: 18px;
+  color: #4a76a8;
+}
+
+.description {
+  color: #555;
+}
+
+/* ---------- Bid stats ---------- */
+
+.bidStats {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  padding: 14px 0;
+  margin: 14px 0;
+}
+
+.label {
+  font-size: 12px;
+  color: #999;
+  text-transform: uppercase;
+}
+
+.currentBid {
+  font-size: 28px;
+  font-weight: bold;
+  color: #4a76a8;
+}
+
+/* ---------- Alerts ---------- */
+
+.alertBanner {
+  background: #fdecea;
+  color: #c0392b;
+  border: 1px solid #f5c6cb;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.soldBanner {
+  background: #eaf6ec;
+  color: #1e6b3a;
+  border: 1px solid #c3e6cb;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* ---------- Bid form ---------- */
+
+.bidForm {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.bidForm input {
+  margin-top: 0;
+}
+
+.bidForm button {
+  margin-top: 0;
+  width: auto;
+  white-space: nowrap;
+  padding: 10px 16px;
+}
+
+#bidAmountInput::-webkit-outer-spin-button,
+#bidAmountInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+#bidAmountInput {
+  -moz-appearance: textfield;
+}
+
+/* ---------- Bid history ---------- */
+/* ---------- Bid history ---------- */
+
+.bidHistoryList {
+  list-style: none;
+  padding: 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.bidHistoryList li {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.bidHistoryList .time {
+  color: #999;
+  font-size: 12px;
+}
