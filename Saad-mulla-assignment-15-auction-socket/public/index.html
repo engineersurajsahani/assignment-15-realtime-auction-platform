@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Trading Floor | Real-Time Auction Engine</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>⚡ Live Trading Floor Engine</h1>
+      <div class="user-status">
+        <span id="viewer-count">👀 Viewers: 0</span>
+        <span id="user-display">Connecting...</span>
+      </div>
+    </header>
+
+    <!-- Outbid & Alert Banner -->
+    <div id="alert-banner" class="banner hidden"></div>
+
+    <main class="auction-grid">
+      <!-- Item Info & Live Price Panel -->
+      <section class="card item-card">
+        <div class="badge" id="auction-status">ACTIVE</div>
+        <h2 id="item-title">Loading Item...</h2>
+        <p id="item-description" class="desc">Loading description...</p>
+        
+        <div class="ticker-box">
+          <div class="ticker-label">CURRENT HIGHEST BID</div>
+          <div class="ticker-value" id="current-bid">₹0</div>
+          <div class="highest-bidder" id="highest-bidder">Highest Bidder: None</div>
+        </div>
+
+        <div class="timer-box" id="timer-box">
+          <span class="timer-label">TIME REMAINING</span>
+          <span class="timer-value" id="timer-display">00s</span>
+        </div>
+
+        <!-- Bidding Control Form -->
+        <div class="bid-controls" id="bid-controls">
+          <label for="bid-input">Place Quick Increment or Custom Bid:</label>
+          <div class="input-group">
+            <button type="button" class="btn btn-sec" id="btn-quick-bid">+ Min Increment</button>
+            <input type="number" id="bid-input" placeholder="Enter bid amount" />
+            <button type="button" class="btn btn-primary" id="btn-place-bid">PLACE BID</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Real-Time Audit Feed -->
+      <section class="card history-card">
+        <h3>📜 Live Activity Feed</h3>
+        <ul id="bid-history" class="history-list">
+          <li class="empty-msg">No bids placed yet.</li>
+        </ul>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
