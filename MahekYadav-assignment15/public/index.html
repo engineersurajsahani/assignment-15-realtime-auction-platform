@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Live Auction Floor</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div>
+        <p class="eyebrow">LIVE AUCTION</p>
+        <h1>Auction Floor</h1>
+      </div>
+      <div id="connectionStatus" class="status offline">Connecting...</div>
+    </header>
+
+    <main>
+      <section class="hero-card">
+        <div class="item-info">
+          <span class="live-dot">● LIVE</span>
+          <h2 id="itemTitle">Loading auction...</h2>
+          <p id="itemDescription"></p>
+
+          <div class="stats">
+            <div>
+              <span>Current bid</span>
+              <strong id="currentBid">₹50,000</strong>
+            </div>
+            <div>
+              <span>Highest bidder</span>
+              <strong id="highestBidder">—</strong>
+            </div>
+            <div>
+              <span>Viewers</span>
+              <strong id="viewerCount">0</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="timer-box">
+          <span>TIME LEFT</span>
+          <strong id="timer">01:00</strong>
+        </div>
+      </section>
+
+      <section class="grid">
+        <div class="panel">
+          <h3>Join bidding floor</h3>
+
+          <form id="joinForm">
+            <label for="username">Username</label>
+            <input
+              id="username"
+              type="text"
+              placeholder="Enter your name"
+              required
+            />
+            <button type="submit">Join Auction</button>
+          </form>
+
+          <div id="bidSection" class="hidden">
+            <h3>Place your bid</h3>
+            <p class="hint">
+              Minimum next bid:
+              <strong id="minimumBid">₹52,000</strong>
+            </p>
+
+            <div class="bid-row">
+              <input id="bidAmount" type="number" placeholder="Enter amount" />
+              <button id="bidButton">Place Bid</button>
+            </div>
+          </div>
+
+          <div id="message" class="message"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-heading">
+            <h3>Live bid activity</h3>
+            <span id="activityCount">0 bids</span>
+          </div>
+          <div id="bidHistory" class="history">
+            <p class="empty">No bids yet.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="alert" class="alert hidden"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
