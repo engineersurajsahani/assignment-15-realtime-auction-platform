@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Live Auction</title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <header>
+    <h1>🔨 Live Auction</h1>
+    <p>Real-Time Bidding Platform</p>
+  </header>
+
+  <main>
+
+    <!-- Join Auction -->
+    <section id="joinSection" class="card">
+      <h2>Join Auction</h2>
+
+      <input
+        type="text"
+        id="username"
+        placeholder="Enter your username"
+      />
+
+      <button id="joinBtn">
+        Join Auction
+      </button>
+
+      <p id="joinMessage"></p>
+    </section>
+
+
+    <!-- Auction -->
+    <section id="auctionSection" class="hidden">
+
+      <div class="auction-header">
+
+        <div>
+          <h2 id="itemTitle">Loading...</h2>
+          <p id="itemDescription"></p>
+        </div>
+
+        <div class="timer-box">
+          <span>Time Left</span>
+          <strong id="timer">60</strong>
+          <small>seconds</small>
+        </div>
+
+      </div>
+
+
+      <div class="auction-grid">
+
+        <!-- Main Auction -->
+        <div class="card">
+
+          <h3>Current Bid</h3>
+
+          <div class="current-bid">
+            ₹<span id="currentBid">50,000</span>
+          </div>
+
+          <p>
+            Highest Bidder:
+            <strong id="highestBidder">No bids yet</strong>
+          </p>
+
+          <p>
+            Minimum next bid:
+            <strong id="minimumBid">₹52,000</strong>
+          </p>
+
+
+          <div class="bid-section">
+
+            <input
+              type="number"
+              id="bidAmount"
+              placeholder="Enter your bid"
+            />
+
+            <button id="bidBtn">
+              Place Bid
+            </button>
+
+          </div>
+
+          <p id="bidMessage"></p>
+
+        </div>
+
+
+        <!-- Viewers -->
+        <div class="card">
+
+          <h3>👥 Live Viewers</h3>
+
+          <div class="viewer-count">
+            <span id="viewerCount">0</span>
+          </div>
+
+          <p>people watching this auction</p>
+
+        </div>
+
+      </div>
+
+
+      <!-- Notifications -->
+      <div id="notification" class="notification hidden"></div>
+
+
+      <!-- Bid History -->
+      <section class="card">
+
+        <h2>📜 Bid History</h2>
+
+        <div id="bidHistory">
+          <p>No bids yet.</p>
+        </div>
+
+      </section>
+
+    </section>
+
+  </main>
+
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js"></script>
+
+</body>
+</html>
