@@ -1,0 +1,29 @@
+[
+  {
+    "id": "AUC_VINTAGE_99",
+    "title": "1967 Vintage Fender Stratocaster",
+    "description": "Original body and neck, rare psychedelic-era sunburst finish in museum condition.",
+    "image": "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?w=600&auto=format&fit=crop",
+    "startingPrice": 50000,
+    "minIncrement": 2000,
+    "durationSeconds": 60
+  },
+  {
+    "id": "AUC_ROLEX_01",
+    "title": "1985 Rolex Submariner Limited Edition",
+    "description": "First-owner diver with original bezel, papers and box. Swiss-certified movement.",
+    "image": "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=600&auto=format&fit=crop",
+    "startingPrice": 150000,
+    "minIncrement": 5000,
+    "durationSeconds": 45
+  },
+  {
+    "id": "AUC_SIGNED_77",
+    "title": "Signed Limited Art Print #77",
+    "description": "Numbered 77/100, hand-signed by the artist with certificate of authenticity.",
+    "image": "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=600&auto=format&fit=crop",
+    "startingPrice": 10000,
+    "minIncrement": 500,
+    "durationSeconds": 30
+  }
+]

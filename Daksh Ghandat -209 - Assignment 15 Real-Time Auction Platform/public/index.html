@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Live Auction Floor · Socket.io</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-dot"></span>
+      <h1>AUCTION<span>FLOOR</span></h1>
+    </div>
+    <div class="status-pill" id="conn-status">
+      <span class="pulse"></span> Connecting
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="card entrance-card" id="entrance">
+      <h2>Join the Live Bidding Floor</h2>
+      <label class="field">
+        <span>Your Name</span>
+        <input id="username-input" type="text" placeholder="e.g. Vikram" maxlength="24" autocomplete="off" />
+      </label>
+      <label class="field">
+        <span>Select Lot</span>
+        <select id="auction-select"></select>
+      </label>
+      <button id="join-btn" class="btn btn-primary">Enter Auction Room</button>
+      <p class="hint">
+        Open 3 tabs with different names to test outbid alerts &amp; anti-snipe protection.
+      </p>
+    </section>
+
+    <section class="card auction-card hidden" id="auction-view">
+      <div class="auction-grid">
+        <div class="lot-panel">
+          <img id="lot-image" class="lot-image" alt="Lot" />
+          <div class="lot-meta">
+            <h2 id="lot-title">—</h2>
+            <p id="lot-desc">—</p>
+            <span class="tag" id="lot-id">—</span>
+          </div>
+        </div>
+
+        <div class="bid-panel">
+          <div class="ticker-row">
+            <div class="ticker-box">
+              <span class="ticker-label">Current Bid</span>
+              <span class="ticker-value" id="current-bid">₹0</span>
+            </div>
+            <div class="timer-box" id="timer-box">
+              <span class="ticker-label">Time Left</span>
+              <span class="timer-value" id="timer">--:--</span>
+            </div>
+          </div>
+
+          <div class="leader-row">
+            <span>Leading bidder: <b id="leading-bidder">—</b></span>
+            <span class="tag">Min increment: <b id="min-inc"></b></span>
+          </div>
+
+          <div class="wallet-row">
+            <span>Wallet balance</span>
+            <b id="wallet-balance">₹0</b>
+          </div>
+
+          <div class="bid-controls" id="bid-controls">
+            <div class="quick-bids">
+              <button id="qp1" class="btn btn-quick">+1×</button>
+              <button id="qp2" class="btn btn-quick">+2×</button>
+              <button id="qp5" class="btn btn-quick">+5×</button>
+            </div>
+            <div class="amount-row">
+              <input id="bid-amount" type="number" min="0" step="100" placeholder="Custom amount" />
+              <button id="bid-btn" class="btn btn-bid">Place Bid</button>
+            </div>
+            <button id="leave-btn" class="btn btn-ghost">Leave Room</button>
+          </div>
+
+          <div class="bid-closed" id="bid-closed" hidden>
+            <span>🔨 This lot has been sold. Bidding is closed.</span>
+            <button id="leave-btn-2" class="btn btn-ghost">Leave Room</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="history-head">
+        <h3>Live Bid Activity Feed</h3>
+        <span class="viewers"><span class="eye">👁</span> <b id="viewer-count">0</b> watching</span>
+      </div>
+      <ul class="bid-history" id="bid-history">
+        <li class="empty-history">No bids yet</li>
+      </ul>
+    </section>
+  </main>
+
+  <div class="toast-stack" id="toast-stack"></div>
+
+  <div class="modal-overlay hidden" id="sold-modal">
+    <div class="modal-card">
+      <span class="gavel">🔨</span>
+      <h2 id="sold-title">Sold!</h2>
+      <p id="sold-message">—</p>
+      <button id="sold-close" class="btn btn-primary">Back to Lobby</button>
+    </div>
+  </div>
+
+  <script src="socket.io/socket.io.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
