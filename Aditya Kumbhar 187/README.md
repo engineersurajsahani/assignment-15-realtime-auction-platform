@@ -5,6 +5,7 @@
 **Track:** Backend & Real-Time Web  
 **Tech Stack:** Node.js, Express.js, Socket.io, In-Memory State Engine, Timer Synchronizer, CORS, Dotenv  
 
+Live Link: https://assignment-15-realtime-auction-platform-production.up.railway.app/ 
 ---
 
 ## 📌 1. Project Overview
