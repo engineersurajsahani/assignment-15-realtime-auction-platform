@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOTHEBY'S LIVE | Mission-Critical Live Bidding Trading Floor</title>
+  <meta name="description" content="Server-authoritative live bidding trading floor featuring real-time concurrency resolution, anti-snipe countdown extensions, and auditable tape history.">
+  
+  <!-- Design System Tokens & Styles -->
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/floor.css">
+</head>
+<body>
+
+  <!-- Floating Anti-Snipe Toast Notification -->
+  <div id="anti-snipe-toast" class="anti-snipe-toast" role="alert">
+    <div class="snipe-icon">⏱</div>
+    <div>
+      <div class="snipe-title">Anti-Snipe Protection Triggered</div>
+      <div id="snipe-toast-desc" class="snipe-toast-desc">Auction extended by +20 seconds</div>
+    </div>
+  </div>
+
+  <div class="floor-app">
+    <!-- Top Floor Header -->
+    <header class="floor-header">
+      <div class="brand-section">
+        <div class="brand-logo">SOTHEBY'S LIVE</div>
+        <div class="brand-badge">
+          <span class="live-beacon"></span>
+          <span>TRADING FLOOR</span>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <div class="status-pill">
+          <span class="status-dot"></span>
+          <span>SERVER AUTHORITATIVE</span>
+        </div>
+
+        <button id="user-profile-btn" class="user-badge-btn" title="Click to change bidder identity">
+          <span class="avatar-dot"></span>
+          <span id="user-badge-name">Lord Sterling</span>
+          <span style="font-size:0.75rem; color:var(--color-gold-500)">✎</span>
+        </button>
+
+        <button id="audio-toggle-btn" class="icon-btn" title="Toggle audio cues">
+          🔊 <span style="font-size:0.75rem">AUDIO ON</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Multi-Room Lot Switcher Bar -->
+    <nav id="lot-switcher-bar" class="lot-switcher-bar" aria-label="Auction Lots"></nav>
+
+    <!-- Outbid Urgent Alarm Banner -->
+    <aside id="outbid-alert-banner" class="outbid-alert-banner" role="alert" aria-live="assertive">
+      <div class="outbid-content">
+        <div class="outbid-icon">🚨</div>
+        <div class="outbid-text">
+          <h4>OUTBID ALERT — IMMEDIATE ACTION REQUIRED</h4>
+          <p id="outbid-desc-text">Another bidder has surpassed your high bid. Retake lead now!</p>
+        </div>
+      </div>
+      <div class="outbid-actions">
+        <button id="rebid-action-btn" class="rebid-btn">MATCH &amp; COUNTER-BID</button>
+        <button id="dismiss-outbid-btn" class="dismiss-outbid-btn" aria-label="Dismiss">&times;</button>
+      </div>
+    </aside>
+
+    <!-- Main Trading Floor Grid -->
+    <main class="floor-grid">
+      
+      <!-- Left Column: Hero Lot & Bidding Centerpiece -->
+      <section class="hero-column">
+        
+        <!-- Lot Showcase Card -->
+        <article class="lot-card">
+          <div class="lot-media-wrap">
+            <img id="lot-hero-image" class="lot-image" src="https://images.unsplash.com/photo-1516924962500-2b4b3b99ea02?auto=format&fit=crop&w=1200&q=80" alt="Lot showcase item">
+            <div class="lot-media-gradient"></div>
+            <div class="lot-badges-top">
+              <span id="lot-number-pill" class="lot-number-pill">LOT 42</span>
+              <span class="viewer-count-pill">
+                <span class="viewer-pulse"></span>
+                <span id="viewer-count-text">1 Active Observer</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="lot-info-body">
+            <div id="lot-category-tag" class="lot-category">Vintage Instruments &amp; Provenance</div>
+            <h1 id="lot-title-text" class="lot-title">1959 Gibson Les Paul Standard 'Burst'</h1>
+            <p id="lot-desc-text" class="lot-desc">One of the most mythical electric guitars in existence. Featuring original PAF humbuckers, flamed bookmatched maple top, and Brazilian rosewood fretboard in immaculate collector condition.</p>
+          </div>
+        </article>
+
+        <!-- Hero Price Centerpiece -->
+        <div class="price-centerpiece">
+          <div class="price-label">AUTHORITATIVE CURRENT HIGH BID</div>
+          <div class="hero-price-display" id="hero-price-display">
+            <span id="hero-price-amount" class="tabular-nums">$250,000</span>
+          </div>
+          <div id="price-leader-status" class="price-leader-status">
+            <span>Starting Reserve Price</span>
+          </div>
+        </div>
+
+        <!-- Countdown Timer Component -->
+        <div id="countdown-box" class="countdown-container">
+          <div class="countdown-header">
+            <span class="countdown-label">CLOSING COUNTDOWN</span>
+            <span id="countdown-digits" class="countdown-digits">01:30</span>
+          </div>
+          <div class="countdown-bar-track">
+            <div id="countdown-bar-fill" class="countdown-bar-fill" style="width: 100%;"></div>
+          </div>
+        </div>
+
+        <!-- Bidding Interaction Console -->
+        <div id="bidding-console" class="bidding-console">
+          <div class="console-meta-row">
+            <span>Next Minimum Increment:</span>
+            <span>Required Bid: <strong id="min-bid-highlight" class="min-bid-highlight">$255,000</strong></span>
+          </div>
+
+          <!-- Quick Increments Grid -->
+          <div id="quick-increments-grid" class="quick-increments-grid">
+            <!-- Rendered dynamically -->
+          </div>
+
+          <!-- Manual Bid Input & Submit -->
+          <div class="manual-bid-row">
+            <div class="bid-input-wrapper">
+              <span class="currency-symbol">$</span>
+              <input type="text" id="manual-bid-input" class="bid-input" placeholder="255,000" inputmode="numeric">
+            </div>
+            <button id="bid-submit-btn" class="bid-submit-btn">
+              <span>PLACE BID</span>
+            </button>
+          </div>
+
+          <!-- Inline Error Feedback -->
+          <div id="console-error-msg" class="console-error-msg" role="alert"></div>
+        </div>
+
+        <!-- Sold Stage Overlay (Activated on auction:sold) -->
+        <div id="sold-stage-overlay" class="sold-stage-overlay" role="region" aria-live="polite">
+          <div class="sold-gavel-icon">🔨</div>
+          <h2 class="sold-title">HAMMER DOWN — SOLD</h2>
+          <p class="sold-winner-lead">Winning Bidder Awarded Lot:</p>
+          <div id="sold-winner-name" class="sold-winner-name">Lord Sterling</div>
+          <div id="sold-final-price" class="sold-final-price">$385,000</div>
+          <p style="font-size:0.85rem; color:var(--color-text-muted); margin-top:var(--space-md);">This lot is officially closed. Switch lots above to view other active auctions.</p>
+        </div>
+
+      </section>
+
+      <!-- Right Column: Auditable Activity Feed Tape -->
+      <aside class="tape-column">
+        <div class="tape-card">
+          <div class="tape-header">
+            <div class="tape-title-group">
+              <span style="color:var(--color-gold-400);">●</span>
+              <h3 class="tape-title">AUDITABLE BID TAPE</h3>
+            </div>
+            <span id="tape-count-pill" class="tape-count-pill">0</span>
+          </div>
+
+          <div id="tape-scroll-list" class="tape-scroll-list" aria-live="polite">
+            <div class="tape-empty-state">No bids logged yet. Place first bid to open trading floor.</div>
+          </div>
+        </div>
+      </aside>
+
+    </main>
+  </div>
+
+  <!-- Bidder Persona Switcher Modal -->
+  <div id="user-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-card">
+      <h3 id="modal-title" class="modal-title">Bidder Identity</h3>
+      <p class="modal-desc">Enter your name or bidder paddle identifier for the live trading floor:</p>
+      <input type="text" id="modal-username-input" class="modal-input" placeholder="e.g. Duchess Eleanor" maxlength="32">
+      <div class="modal-actions">
+        <button id="modal-cancel-btn" class="modal-btn-cancel">Cancel</button>
+        <button id="modal-save-btn" class="modal-btn-save">Set Identity</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Socket.io & Application Scripts -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="js/socket-client.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
