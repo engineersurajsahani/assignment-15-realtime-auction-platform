@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Live Auction Floor</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  
+  <div id="lobby" class="screen">
+    <header class="lobby-header">
+      <h1>🔨 Live Auction Floor</h1>
+      <p>Pick a room and enter your bidder name to join the live bidding.</p>
+    </header>
+
+    <div class="lobby-form">
+      <input id="usernameInput" type="text" placeholder="Your bidder name (e.g. Vikram)" />
+    </div>
+
+    <div id="auctionList" class="auction-list"></div>
+  </div>
+
+  
+  <div id="room" class="screen hidden">
+    <header class="room-header">
+      <button id="backBtn" class="ghost-btn">← Lobby</button>
+      <div class="room-title">
+        <span id="roomEmoji"></span>
+        <div>
+          <h2 id="roomTitle"></h2>
+          <p id="roomDesc"></p>
+        </div>
+      </div>
+      <div class="viewer-count">👀 <span id="viewerCount">0</span></div>
+    </header>
+
+    <div class="room-body">
+      <section class="bid-panel">
+        <div id="statusBanner" class="status-banner hidden"></div>
+
+        <div class="price-card">
+          <span class="label">Current Bid</span>
+          <span id="currentBid" class="current-bid">₹0</span>
+          <span id="highestBidder" class="highest-bidder">No bids yet</span>
+        </div>
+
+        <div class="timer-card" id="timerCard">
+          <span class="label">Time Remaining</span>
+          <span id="timer" class="timer">--</span>
+        </div>
+
+        <div class="bid-form">
+          <input id="bidInput" type="number" placeholder="Enter your bid amount" />
+          <button id="placeBidBtn">Place Bid</button>
+        </div>
+        <div id="quickBids" class="quick-bids"></div>
+
+        <div id="alertBox" class="alert-box"></div>
+      </section>
+
+      <aside class="history-panel">
+        <h3>📜 Live Bid Activity</h3>
+        <ul id="bidHistory" class="bid-history"></ul>
+      </aside>
+    </div>
+  </div>
+
+  <audio id="bidSound" preload="auto">
+    <source src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=" type="audio/wav">
+  </audio>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
