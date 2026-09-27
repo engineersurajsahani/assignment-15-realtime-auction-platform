@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Live Auction Engine</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <div id="loginPage" class="active">
+    <div class="login-box">
+      <h2>Enter Live Auction Floor</h2>
+      <input type="text" id="usernameInput" placeholder="Your Username...">
+      <button id="joinBtn">Enter</button>
+    </div>
+  </div>
+
+  <div id="auctionPage">
+    <div class="header">
+      <h2>Auction: <span id="itemTitle"></span></h2>
+      <div class="stats">Viewers: <span id="viewersCount">0</span></div>
+    </div>
+    
+    <div class="main-content">
+      <div class="auction-card">
+        <h3 id="itemDesc"></h3>
+        <div class="price-display">
+          Current Bid: <span id="currentBidDisplay">₹0</span>
+        </div>
+        <div class="bidder-info">
+          Highest Bidder: <span id="highestBidderDisplay">None</span>
+        </div>
+        <div class="timer" id="timerDisplay">60s</div>
+        
+        <div class="bidding-controls">
+          <input type="number" id="bidInput" placeholder="Enter bid amount...">
+          <button id="placeBidBtn">Place Bid</button>
+        </div>
+      </div>
+      
+      <div class="history-panel">
+        <h3>Live Bid History</h3>
+        <ul id="bidHistoryList"></ul>
+      </div>
+    </div>
+
+    <div id="alertsContainer"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
